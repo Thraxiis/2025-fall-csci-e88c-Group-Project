@@ -1,3 +1,5 @@
+import scala.collection.generic.{GenericCompanion => libraryDependencies}
+
 ThisBuild / organization := "org.cscie88c"
 ThisBuild / scalaVersion := "2.13.16"
 ThisBuild / version := "0.1.0-SNAPSHOT"
@@ -6,6 +8,16 @@ ThisBuild / versionScheme := Some("semver-spec")
 val circeVersion = "0.13.0"
 val pureconfigVersion = "0.15.0"
 val catsVersion = "2.2.0"
+
+/* ------------------------------------------------------------ */
+// Added this to test run parquet file
+val sparkVersion = "3.5.1"
+
+lazy val sparkDependencies = Seq(
+  "org.apache.spark" %% "spark-core" % sparkVersion,
+  "org.apache.spark" %% "spark-sql"  % sparkVersion
+)
+/* ------------------------------------------------------------ */
 
 lazy val scalaTest = Seq(
     "org.scalatest" %% "scalatest" % "3.2.19" % Test,
@@ -84,6 +96,7 @@ lazy val spark = project
   .settings(
     commonSettings,
     // Spark module settings)
+    libraryDependencies ++= sparkDependencies // Added to read parquet
   )
   .dependsOn(core)
   .enablePlugins(JavaAppPackaging)
