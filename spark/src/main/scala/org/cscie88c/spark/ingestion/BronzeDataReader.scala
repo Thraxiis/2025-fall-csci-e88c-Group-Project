@@ -7,7 +7,7 @@ object BronzeDataReader {
 
   def readParquet(spark: SparkSession, path: String): DataFrame = {
       spark.read
-        .schema(TripSchema.tripSchema)
+        // .schema(TripSchema.tripSchema) // Only works if we use the Spark Schema method
         .parquet(path)
     }
 
@@ -16,7 +16,7 @@ object BronzeDataReader {
       spark.read
         .option("header", header.toString)
         .option("delimiter", delimiter)
-        .schema(TripSchema.tripSchema)
+        // .schema(TripSchema.tripSchema) // Only works if we use the Spark Schema method
         .csv(path)
     }
 
@@ -29,7 +29,6 @@ object BronzeDataReader {
     val filePath = "../Data/bronze/yellow_tripdata_2025-01.parquet"
 
     val df = spark.read.parquet(filePath)
-
 
     // Test Section
     // println(s"Schema for $filePath:")
