@@ -1,8 +1,24 @@
 package org.cscie88c.spark.ingestion
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.cscie88c.spark.config.TripSchema
 
-object RawDataReader {
+object BronzeDataReader {
+
+  def readParquet(spark: SparkSession, path: String): DataFrame = {
+      spark.read
+        .schema(TripSchema.tripSchema)
+        .parquet(path)
+    }
+
+    // Project doesn't specify CSV importing, but the code is simple enough
+    def readCsv(spark: SparkSession, path: String, header: Boolean = true, delimiter: String = ","): DataFrame = {
+      spark.read
+        .option("header", header.toString)
+        .option("delimiter", delimiter)
+        .schema(TripSchema.tripSchema)
+        .csv(path)
+    }
 
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
@@ -14,11 +30,11 @@ object RawDataReader {
 
     val df = spark.read.parquet(filePath)
 
-    println(s"Schema for $filePath:")
-    df.printSchema()
 
-    // Sample a few rows to inspect
-    df.show(5, truncate = false)
+    // Test Section
+    // println(s"Schema for $filePath:")
+    // df.printSchema()
+    // df.show(5, truncate = false)  // Sample a few rows to inspect
 
     spark.stop()
   }

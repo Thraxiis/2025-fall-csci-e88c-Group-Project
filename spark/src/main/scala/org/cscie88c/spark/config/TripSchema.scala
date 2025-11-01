@@ -20,7 +20,7 @@ case class TripSchema(
 )
 
 object TripSchema {
-  val schema: StructType = StructType(Seq(
+  val tripSchema: StructType = StructType(Seq(
     StructField("driverID", IntegerType, nullable = true),
     StructField("pickup_datetime", TimestampType, nullable = true),
     StructField("dropoff_datetime", TimestampType, nullable = true),
