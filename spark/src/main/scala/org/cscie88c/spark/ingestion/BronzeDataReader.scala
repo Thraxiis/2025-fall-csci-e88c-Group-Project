@@ -1,24 +1,17 @@
 package org.cscie88c.spark.ingestion
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, SparkSession, Dataset}
 import org.cscie88c.spark.config.TripSchema
 
 object BronzeDataReader {
 
-  def readParquet(spark: SparkSession, path: String): DataFrame = {
-      spark.read
-        // .schema(TripSchema.tripSchema) // Only works if we use the Spark Schema method
-        .parquet(path)
-    }
+  def readParquet(spark: SparkSession, path: String): Dataset[TripSchema] = {
+    import spark.implicits._
 
-    // Project doesn't specify CSV importing, but the code is simple enough
-    def readCsv(spark: SparkSession, path: String, header: Boolean = true, delimiter: String = ","): DataFrame = {
-      spark.read
-        .option("header", header.toString)
-        .option("delimiter", delimiter)
-        // .schema(TripSchema.tripSchema) // Only works if we use the Spark Schema method
-        .csv(path)
-    }
+    spark.read
+      .parquet(path)
+      .as[TripSchema]
+  }
 
   def main(args: Array[String]): Unit = {
     val spark = SparkSession.builder()
